@@ -481,9 +481,10 @@ p.FSB.h.adi$congener <- factor(p.FSB.h.adi$congener,
 
 # Organize fraction to be displayed in plot
 p.FSB.h.adi$phase <- factor(p.FSB.h.adi$phase,
-                         levels = c('frac.dis.adi.FBS(15%)', 'frac.alb.adi.FBS(15%)', 'frac.prot.adi.FBS(15%)',
-                                    'frac.prot-cell.adi.FBS(15%)', 'frac.lip-cell.adi.FBS(15%)',
-                                    'frac.air.adi.FBS(15%)'))
+                         levels = c('frac.dis.adi.FBS(15%)', 'frac.alb.adi.FBS(15%)',
+                                    'frac.prot.adi.FBS(15%)', 'frac.prot-cell.adi.FBS(15%)',
+                                    'frac.lip-cell.adi.FBS(15%)', 'frac.air.adi.FBS(15%)'))
+
 # Plot
 ggplot(p.FSB.h.adi, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
@@ -519,9 +520,9 @@ p.FSB.l.adi$congener <- factor(p.FSB.l.adi$congener,
 
 # Organize fraction to be displayed in plot
 p.FSB.l.adi$phase <- factor(p.FSB.l.adi$phase,
-                        levels = c('frac.dis.adi.FBS(0.5%)', 'frac.alb.adi.FBS(0.5%)', 'frac.prot.adi.FBS(0.5%)',
-                                   'frac.prot-cell.adi.FBS(0.5%)', 'frac.lip-cell.adi.FBS(0.5%)',
-                                   'frac.air.adi.FBS(0.5%)'))
+                        levels = c('frac.dis.adi.FBS(0.5%)', 'frac.alb.adi.FBS(0.5%)',
+                                   'frac.prot.adi.FBS(0.5%)', 'frac.prot-cell.adi.FBS(0.5%)',
+                                   'frac.lip-cell.adi.FBS(0.5%)', 'frac.air.adi.FBS(0.5%)'))
 
 # Plot
 ggplot(p.FSB.l.adi, aes(x = congener, y = fraction, fill = phase)) + 
@@ -540,11 +541,11 @@ ggplot(p.FSB.l.adi, aes(x = congener, y = fraction, fill = phase)) +
 
 # (3) FSB = 0.0%
 p.FSB.0.adi <- final.resultAdi[,!names(final.resultAdi) %in% c("frac.dis.adi.FBS(15%)", "frac.alb.adi.FBS(15%)",
-                                                               "frac.prot.adi.FBS(15%)", "frac.prot-cell.adi.FBS(15%)", "frac.lip-cell.adi.FBS(15%)",
-                                                     "frac.air.adi.FBS(15%)", "frac.dis.adi.FBS(0.5%)",
-                                                     "frac.alb.adi.FBS(0.5%)", "frac.prot.adi.FBS(0.5%)",
-                                                     "frac.prot-cell.adi.FBS(0.5%)", "frac.lip-cell.adi.FBS(0.5%)",
-                                                     "frac.air.adi.FBS(0.5%)")]
+                                                               "frac.prot.adi.FBS(15%)", "frac.prot-cell.adi.FBS(15%)",
+                                                               "frac.lip-cell.adi.FBS(15%)", "frac.air.adi.FBS(15%)",
+                                                               "frac.dis.adi.FBS(0.5%)", "frac.alb.adi.FBS(0.5%)",
+                                                               "frac.prot.adi.FBS(0.5%)", "frac.prot-cell.adi.FBS(0.5%)",
+                                                               "frac.lip-cell.adi.FBS(0.5%)", "frac.air.adi.FBS(0.5%)")]
 
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.0.adi <- melt(p.FSB.0.adi, id.var = c("congener"),
