@@ -23,7 +23,6 @@ This work was supported by the National Institutes of Environmental Health Scien
 
 This README file describes a revised version of scripts for calculating the individual fraction of PCBs in multiwell experiments used in this paper:
 
-
 The script is developed for individual PCB congeners, various FBS concentration, as well as various cell concentrations. Three PCB mixtures are modeled here, i.e., Cabinet, Aroclor 1016 (top 12) and Aroclor 1254 (top 12).
 
 --------
