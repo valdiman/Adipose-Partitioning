@@ -266,7 +266,7 @@ ggplot(p.FSB.0, aes(x = congener, y = fraction, fill = phase)) +
         axis.title.x = element_text(face = "bold", size = 8))
 
 # Fraction with adipose cells -----------------------------------
-
+# Function to calculate fractions
 fractionAdi = function(logKa.w, dUaw, logKlip.w, logKpro.w, logKalb.w,
                     R, tst, texp) {
   
@@ -283,13 +283,13 @@ fractionAdi = function(logKa.w, dUaw, logKlip.w, logKpro.w, logKalb.w,
   dwater <- 0.99127 # kg/L at 37 C
   C.water.adi <- C.water.adi/dwater # L/L
   V.water.adi <- C.water.adi*Adi/10^6 # L water inside cell
-  # albumin concentration from FSB
+  # Albumin concentration from FBS
   C.alb.h <- 5.145/1000 # kg/L
   C.alb.l <- 0.25/1000 # kg/L
   dalb <- 1 # kg/L ask!
   C.alb.h <- C.alb.h/dalb # Lalb/Lwater
   C.alb.l <- C.alb.l/dalb # Lalb/Lwater
-  # protein concentration from FSB
+  # Protein concentration from FBS
   C.prot.med.h <- 5.145/1000 # kg/L
   C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
   C.prot.med.l <- 0.25/1000 # kg/L
@@ -338,6 +338,22 @@ fractionAdi = function(logKa.w, dUaw, logKlip.w, logKpro.w, logKalb.w,
             f.air.alb.0.adi)
 }
 
+# Cabinet mixture with adipose cells --------------------------------------
+# Read data.xlsx
+d <- data.frame(read_excel("DataAdi.xlsx", sheet = "cabinet",
+                           col_names = TRUE, col_types = NULL))
+
+# Name parameters
+congener <- d$congener
+logKa.w <- d$logKair.water
+dUaw <- d$dUaw
+logKlip.w <- d$logKlipid.water
+logKpro.w <- d$logKprotein.water
+logKalb.w <- d$logKalbumin.water
+R <- d$R
+tst <- d$tst
+texp <- d$texp
+
 num.congener <- length(congener)
 resultAdi <- NULL
 for (i in 1:num.congener) {
@@ -347,25 +363,105 @@ for (i in 1:num.congener) {
 }
 
 final.resultAdi <- data.frame(congener, resultAdi)
-names(final.resultAdi) <- c("congener", "frac.dis.alb.h.adi",
-                            "frac.alb.alb.h.adi", "frac.prot.alb.h.adi",
-                            "frac.prot.adi.alb.h.adi", "frac.lip.adi.alb.h.adi",
-                            "frac.air.alb.h.adi", "frac.dis.alb.l.adi",
-                            "frac.alb.alb.l.adi", "frac.prot.alb.l.adi",
-                            "frac.prot.adi.alb.l.adi", "frac.lip.adi.alb.l.adi",
-                            "frac.air.alb.l.adi", "frac.dis.alb.0.adi",
-                            "frac.prot.adi.alb.0.adi", "frac.lip.adi.alb.0.adi",
-                            "frac.air.alb.0.adi")
+names(final.resultAdi) <- c("congener", "frac.dis.adi.FBS(15%)",
+                            "frac.alb.adi.FBS(15%)", "frac.prot.adi.FBS(15%)",
+                            "frac.prot-cell.adi.FBS(15%)", "frac.lip-cell.adi.FBS(15%)",
+                            "frac.air.adi.FBS(15%)", "frac.dis.adi.FBS(0.5%)",
+                            "frac.alb.adi.FBS(0.5%)", "frac.prot.adi.FBS(0.5%)",
+                            "frac.prot-cell.adi.FBS(0.5%)", "frac.lip-cell.adi.FBS(0.5%)",
+                            "frac.air.adi.FBS(0.5%)", "frac.dis.adi.FBS(0%)",
+                            "frac.prot-cell.adi.FBS(0%)", "frac.lip-cell.adi.FBS(0%)",
+                            "frac.air.adi.FBS(0%)")
 
-# Plots
-# create data.frame with needed fractions
+# Export results
+write.csv(final.resultAdi, file = "CabinetAdipose.csv")
+
+# Aroclor 1016 (top 12) with adipose cells --------------------------------
+# Read data.xlsx
+d.A1016 <- data.frame(read_excel("DataAdi.xlsx", sheet = "Aroclor1016",
+                                 col_names = TRUE, col_types = NULL))
+
+# Name parameters
+congener <- d.A1016$congener
+logKa.w <- d.A1016$logKair.water
+dUaw <- d.A1016$dUaw
+logKlip.w <- d.A1016$logKlipid.water
+logKpro.w <- d.A1016$logKprotein.water
+logKalb.w <- d.A1016$logKalbumin.water
+R <- d.A1016$R
+tst <- d.A1016$tst
+texp <- d.A1016$texp
+
+num.congener <- length(congener)
+resultAdi <- NULL
+for (i in 1:num.congener) {
+  resultAdi <- rbind(resultAdi, fractionAdi(logKa.w[i], dUaw[i], logKlip.w[i],
+                                            logKpro.w[i], logKalb.w[i], R[i],
+                                            tst[i], texp[i]))
+}
+
+final.resultAdi <- data.frame(congener, resultAdi)
+names(final.resultAdi) <- c("congener", "frac.dis.adi.FBS(15%)",
+                            "frac.alb.adi.FBS(15%)", "frac.prot.adi.FBS(15%)",
+                            "frac.prot-cell.adi.FBS(15%)", "frac.lip-cell.adi.FBS(15%)",
+                            "frac.air.adi.FBS(15%)", "frac.dis.adi.FBS(0.5%)",
+                            "frac.alb.adi.FBS(0.5%)", "frac.prot.adi.FBS(0.5%)",
+                            "frac.prot-cell.adi.FBS(0.5%)", "frac.lip-cell.adi.FBS(0.5%)",
+                            "frac.air.adi.FBS(0.5%)", "frac.dis.adi.FBS(0%)",
+                            "frac.prot-cell.adi.FBS(0%)", "frac.lip-cell.adi.FBS(0%)",
+                            "frac.air.adi.FBS(0%)")
+
+# Export results
+write.csv(final.resultAdi, file = "A1016Adipose.csv")
+
+# Aroclor 1254 (top 12) with adipose cells --------------------------------
+# Read data.xlsx
+d.A1254 <- data.frame(read_excel("DataAdi.xlsx", sheet = "Aroclor1254",
+                                 col_names = TRUE, col_types = NULL))
+
+# Name parameters
+congener <- d.A1254$congener
+logKa.w <- d.A1254$logKair.water
+dUaw <- d.A1254$dUaw
+logKlip.w <- d.A1254$logKlipid.water
+logKpro.w <- d.A1254$logKprotein.water
+logKalb.w <- d.A1254$logKalbumin.water
+R <- d.A1254$R
+tst <- d.A1254$tst
+texp <- d.A1254$texp
+
+num.congener <- length(congener)
+resultAdi <- NULL
+for (i in 1:num.congener) {
+  resultAdi <- rbind(resultAdi, fractionAdi(logKa.w[i], dUaw[i], logKlip.w[i],
+                                            logKpro.w[i], logKalb.w[i], R[i],
+                                            tst[i], texp[i]))
+}
+
+final.resultAdi <- data.frame(congener, resultAdi)
+names(final.resultAdi) <- c("congener", "frac.dis.adi.FBS(15%)",
+                            "frac.alb.adi.FBS(15%)", "frac.prot.adi.FBS(15%)",
+                            "frac.prot-cell.adi.FBS(15%)", "frac.lip-cell.adi.FBS(15%)",
+                            "frac.air.adi.FBS(15%)", "frac.dis.adi.FBS(0.5%)",
+                            "frac.alb.adi.FBS(0.5%)", "frac.prot.adi.FBS(0.5%)",
+                            "frac.prot-cell.adi.FBS(0.5%)", "frac.lip-cell.adi.FBS(0.5%)",
+                            "frac.air.adi.FBS(0.5%)", "frac.dis.adi.FBS(0%)",
+                            "frac.prot-cell.adi.FBS(0%)", "frac.lip-cell.adi.FBS(0%)",
+                            "frac.air.adi.FBS(0%)")
+
+# Export results
+write.csv(final.resultAdi, file = "A1254Adipose.csv")
+
+# Plots with adipose cells ------------------------------------------------
+# Create data.frame with needed fractions
+# final.resultAdi needs to be changed, depending on the plot
 # (1) FSB = 15%
-p.FSB.h.adi <- final.resultAdi[,!names(final.resultAdi) %in% c("frac.dis.alb.l.adi",
-                                                               "frac.alb.alb.l.adi", "frac.prot.alb.l.adi",
-                                                               "frac.prot.adi.alb.l.adi", "frac.lip.adi.alb.l.adi",
-                                                               "frac.air.alb.l.adi", "frac.dis.alb.0.adi",
-                                                               "frac.prot.adi.alb.0.adi", "frac.lip.adi.alb.0.adi",
-                                                               "frac.air.alb.0.adi")]
+p.FSB.h.adi <- final.resultAdi[,!names(final.resultAdi) %in% c("frac.dis.adi.FBS(0.5%)",
+                                                               "frac.alb.adi.FBS(0.5%)", "frac.prot.adi.FBS(0.5%)",
+                                                               "frac.prot-cell.adi.FBS(0.5%)", "frac.lip-cell.adi.FBS(0.5%)",
+                                                               "frac.air.adi.FBS(0.5%)", "frac.dis.adi.FBS(0%)",
+                                                               "frac.prot-cell.adi.FBS(0%)", "frac.lip-cell.adi.FBS(0%)",
+                                                               "frac.air.adi.FBS(0%)")]
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.h.adi <- melt(p.FSB.h.adi, id.var = c("congener"),
                  variable.name = "phase", value.name = "fraction")
@@ -435,169 +531,6 @@ p.FSB.0 <- melt(p.FSB.0, id.var = c("congener"),
 p.FSB.0$congener <- factor(p.FSB.0$congener,
                            levels = c('PCB11', 'PCB47', 'PCB51',
                                       'PCB68'))
-# Organize fraction to be displayed in plot
-p.FSB.0$phase <- factor(p.FSB.0$phase,
-                        levels = c('frac.air.alb.0', 'frac.dis.alb.0'))
-
-ggplot(p.FSB.0, aes(x = congener, y = fraction, fill = phase)) + 
-  geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "medium"),
-                    values = c("deepskyblue", "red")) +
-  theme_classic() +
-  xlab(expression(bold(""))) +
-  ylab(expression("Fraction in well")) +
-  theme(axis.text.x = element_text(face = "bold", size = 8,
-                                   angle = 60, hjust = 1,
-                                   color = "black"),
-        axis.title.x = element_text(face = "bold", size = 8))
-
-
-# Aroclor 1016 fraction without adipose cells -----------------------------
-
-# Function to calculate fractions
-fractionA.1016 = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
-                    tst, texp) {
-
-  # albumin concentration from FSB
-  C.alb.h <- 4.9/1000 # kg/L
-  C.alb.l <- 0.25/1000 # kg/L
-  dalb <- 1 # kg/L ask!
-  C.alb.h <- C.alb.h/dalb # Lalb/Lwater
-  C.alb.l <- C.alb.l/dalb # Lalb/Lwater
-  # protein concentration from FSB
-  C.prot.med.h <- 4.9/1000 # kg/L
-  dprot <- 1.43 # kg/L ask! ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
-  C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
-  C.prot.med.l <- 0.25/1000 # kg/L
-  C.prot.med.l <- C.prot.med.l/dprot # Lprot/Lwater
-  
-  # Temperature correction for Kaw
-  Ka.w.t <- 10^(logKa.w)*exp(-dUaw/R*(1/texp-1/tst)) # Ka.w corrected by water and air temps
-  logKa.w.t <- log10(Ka.w.t)
-  
-  # Fraction calculation
-  # High FBS (10%)
-  den.alb.h <- 1 + 10^(logKalb.w)*C.alb.h + 10^(logKpro.w)*C.prot.med.h +
-    10^(logKa.w.t)*Va/Vm
-  f.dis.alb.h <- 1/den.alb.h # freely dissolved fraction
-  f.alb.alb.h <- 10^(logKalb.w)*C.alb.h/den.alb.h # albumin fraction from FBS
-  f.prot.alb.h <- 10^(logKpro.w)*C.prot.med.h/den.alb.h # protein fraction from FBS
-  f.air.alb.h <- 10^(logKa.w.t)*Va/den.alb.h/Vm # air fraction
-  
-  # Low FBS (0.5%)
-  den.alb.l <- 1 + 10^(logKalb.w)*C.alb.l + 10^(logKpro.w)*C.prot.med.l +
-    10^(logKa.w.t)*Va/Vm
-  f.dis.alb.l <- 1/den.alb.l # freely dissolved fraction
-  f.alb.alb.l <- 10^(logKalb.w)*C.alb.l/den.alb.l # albumin fraction from FBS
-  f.prot.alb.l <- 10^(logKpro.w)*C.prot.med.l/den.alb.l # protein fraction from FBS
-  f.air.alb.l <- 10^(logKa.w.t)*Va/den.alb.l/Vm # air fraction
-  
-  # No FBS
-  den.alb.0 <- 1  + 10^(logKa.w.t)*Va/Vm
-  f.dis.alb.0 <- 1/den.alb.0 # freely dissolved fraction
-  f.air.alb.0 <- 10^(logKa.w.t)*Va/den.alb.0/Vm # air fraction
-  
-  frac <- c(f.dis.alb.h, f.alb.alb.h, f.prot.alb.h, f.air.alb.h,
-            f.dis.alb.l, f.alb.alb.l, f.prot.alb.l, f.air.alb.l,
-            f.dis.alb.0, f.air.alb.0)
-}
-
-num.congener <- length(congener)
-resultA.1016 <- NULL
-for (i in 1:num.congener) {
-  resultA.1016 <- rbind(resultA.1016, fractionA.1016(logKa.w[i], dUaw[i],
-                                   logKpro.w[i], logKalb.w[i], R[i],
-                                   tst[i], texp[i]))
-}
-
-final.resultA.1016 <- data.frame(congener, resultA.1016)
-names(final.resultA.1016) <- c("congener", "frac.dis.alb.h.A1016", "frac.alb.alb.h.A1016",
-                         "frac.prot.alb.h.A1016", "frac.air.alb.h.A1016",
-                         "frac.dis.alb.l.A1016", "frac.alb.alb.l.A1016",
-                         "frac.prot.alb.l.A1016", "frac.air.alb.l.A1016",
-                         "frac.dis.alb.0.A1016", "frac.air.alb.0.A1016")
-
-# Plots
-# create data.frame with needed fractions
-# (1) FSB = 10%
-p.FSB.h <- final.result[,!names(final.result) %in% c("frac.dis.alb.l", "frac.alb.alb.l",
-                                                     "frac.prot.alb.l", "frac.air.alb.l",
-                                                     "frac.dis.alb.0", "frac.air.alb.0")]
-
-# Transform data.frame p.1 to 3 column data.frame
-p.FSB.h <- melt(p.FSB.h, id.var = c("congener"),
-                variable.name = "phase", value.name = "fraction")
-
-# Name the compounds
-p.FSB.h$congener <- factor(p.FSB.h$congener,
-                           levels = c('PCB11', 'PCB47', 'PCB51',
-                                      'PCB68'))
-
-# Organize fraction to be displayed in plot
-p.FSB.h$phase <- factor(p.FSB.h$phase,
-                        levels = c('frac.air.alb.h', 'frac.alb.alb.h',
-                                   'frac.prot.alb.h', 'frac.dis.alb.h'))
-
-ggplot(p.FSB.h, aes(x = congener, y = fraction, fill = phase)) + 
-  geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FSB-albumin (10%)", "FSB-protein (10%)",
-                               "medium"),
-                    values = c("deepskyblue", "lightgrey", "coral4", "red")) +
-  theme_classic() +
-  xlab(expression(bold(""))) +
-  ylab(expression("Fraction in well")) +
-  theme(axis.text.x = element_text(face = "bold", size = 8,
-                                   angle = 60, hjust = 1,
-                                   color = "black"),
-        axis.title.x = element_text(face = "bold", size = 8))
-
-# (2) FSB = 0.5%
-p.FSB.l <- final.result[,!names(final.result) %in% c("frac.dis.alb.h", "frac.alb.alb.h",
-                                                     "frac.prot.alb.h", "frac.air.alb.h",
-                                                     "frac.dis.alb.0", "frac.air.alb.0")]
-
-# Transform data.frame p.1 to 3 column data.frame
-p.FSB.l <- melt(p.FSB.l, id.var = c("congener"),
-                variable.name = "phase", value.name = "fraction")
-
-# Name the compounds
-p.FSB.l$congener <- factor(p.FSB.l$congener,
-                           levels = c('PCB11', 'PCB47', 'PCB51',
-                                      'PCB68'))
-
-# Organize fraction to be displayed in plot
-p.FSB.l$phase <- factor(p.FSB.l$phase,
-                        levels = c('frac.air.alb.l', 'frac.alb.alb.l',
-                                   'frac.prot.alb.l', 'frac.dis.alb.l'))
-
-ggplot(p.FSB.l, aes(x = congener, y = fraction, fill = phase)) + 
-  geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FSB-albumin (0.5%)", "FSB-protein (0.5%)",
-                               "medium"),
-                    values = c("deepskyblue", "lightgrey", "coral4", "red")) +
-  theme_classic() +
-  xlab(expression(bold(""))) +
-  ylab(expression("Fraction in well")) +
-  theme(axis.text.x = element_text(face = "bold", size = 8,
-                                   angle = 60, hjust = 1,
-                                   color = "black"),
-        axis.title.x = element_text(face = "bold", size = 8))
-
-# (3) FSB = 0.0%
-p.FSB.0 <- final.result[,!names(final.result) %in% c("frac.dis.alb.h", "frac.alb.alb.h",
-                                                     "frac.prot.alb.h", "frac.air.alb.h",
-                                                     "frac.dis.alb.l", "frac.alb.alb.l",
-                                                     "frac.prot.alb.l", "frac.air.alb.l")]
-
-# Transform data.frame p.1 to 3 column data.frame
-p.FSB.0 <- melt(p.FSB.0, id.var = c("congener"),
-                variable.name = "phase", value.name = "fraction")
-
-# Name the compounds
-p.FSB.0$congener <- factor(p.FSB.0$congener,
-                           levels = c('PCB11', 'PCB47', 'PCB51',
-                                      'PCB68'))
-
 # Organize fraction to be displayed in plot
 p.FSB.0$phase <- factor(p.FSB.0$phase,
                         levels = c('frac.air.alb.0', 'frac.dis.alb.0'))
