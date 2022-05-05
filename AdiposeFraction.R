@@ -46,13 +46,13 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
                     tst, texp) {
 
   # albumin concentration from FSB
-  C.alb.h <- 4.9/1000 # kg/L
-  C.alb.l <- 0.25/1000 # kg/L
+  C.alb.h <- 5.145/1000 # kg/L (15%)
+  C.alb.l <- 0.25/1000 # kg/L (0.5%)
   dalb <- 1 # kg/L ask!
   C.alb.h <- C.alb.h/dalb # Lalb/Lwater
   C.alb.l <- C.alb.l/dalb # Lalb/Lwater
   # protein concentration from FSB
-  C.prot.med.h <- 4.9/1000 # kg/L
+  C.prot.med.h <- 5.145/1000 # kg/L
   dprot <- 1.43 # kg/L ask! ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
   C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
   C.prot.med.l <- 0.25/1000 # kg/L
@@ -63,7 +63,7 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
   logKa.w.t <- log10(Ka.w.t)
   
   # Fraction calculation
-  # High FBS (10%)
+  # High FBS (15%)
   den.alb.h <- 1 + 10^(logKalb.w)*C.alb.h + 10^(logKpro.w)*C.prot.med.h +
     10^(logKa.w.t)*Va/Vm
   f.dis.alb.h <- 1/den.alb.h # freely dissolved fraction
@@ -80,7 +80,7 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
   f.air.alb.l <- 10^(logKa.w.t)*Va/den.alb.l/Vm # air fraction
   
   # No FBS
-  den.alb.0 <- 1  + 10^(logKa.w.t)*Va/Vm
+  den.alb.0 <- 1 + 10^(logKa.w.t)*Va/Vm
   f.dis.alb.0 <- 1/den.alb.0 # freely dissolved fraction
   f.air.alb.0 <- 10^(logKa.w.t)*Va/den.alb.0/Vm # air fraction
   
@@ -411,7 +411,6 @@ logKalb.w <- d.A1016$logKalbumin.water
 R <- d.A1016$R
 tst <- d.A1016$tst
 texp <- d.A1016$texp
-
 
 # Aroclor 1016 fraction without adipose cells -----------------------------
 
