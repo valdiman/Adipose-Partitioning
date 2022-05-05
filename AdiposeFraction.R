@@ -24,7 +24,6 @@ Vm <- 1/1000 # Medium volume L
 Va <- Vt-Vm # Air volume L
 
 # Fraction without adipose cells --------------------------------
-
 # Function to calculate fractions
 fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
                     tst, texp) {
@@ -73,7 +72,7 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
             f.dis.alb.0, f.air.alb.0)
 }
 
-# Cabinet mixture ---------------------------------------------------------
+# Cabinet mixture without adipose cells -----------------------------------
 # Read data.xlsx
 d <- data.frame(read_excel("DataAdi.xlsx", sheet = "cabinet",
                            col_names = TRUE, col_types = NULL))
@@ -107,8 +106,77 @@ names(final.result) <- c("congener", "frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
 # Export results
 write.csv(final.result, file = "CabinetNoAdipose.csv")
 
-# Plots
-# create data.frame with needed fractions
+# Aroclor 1016 (top 12) without adipose cells -----------------------------
+# Read data.xlsx
+d.A1016 <- data.frame(read_excel("DataAdi.xlsx", sheet = "Aroclor1016",
+                                 col_names = TRUE, col_types = NULL))
+
+# Name parameters
+congener <- d.A1016$congener
+logKa.w <- d.A1016$logKair.water
+dUaw <- d.A1016$dUaw
+logKlip.w <- d.A1016$logKlipid.water
+logKpro.w <- d.A1016$logKprotein.water
+logKalb.w <- d.A1016$logKalbumin.water
+R <- d.A1016$R
+tst <- d.A1016$tst
+texp <- d.A1016$texp
+
+num.congener <- length(congener)
+result <- NULL
+for (i in 1:num.congener) {
+  result <- rbind(result, fraction(logKa.w[i], dUaw[i],
+                                   logKpro.w[i], logKalb.w[i], R[i],
+                                   tst[i], texp[i]))
+}
+
+final.result <- data.frame(congener, result)
+names(final.result) <- c("congener", "frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
+                         "frac.prot.FBS(15%)", "frac.air.FBS(15%)",
+                         "frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
+                         "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)",
+                         "frac.dis.FBS(0%)", "frac.air.FBS(0%)")
+
+# Export results
+write.csv(final.result, file = "A1016NoAdipose.csv")
+
+# Aroclor 1254 (top 12) without adipose cells -----------------------------
+# Read data.xlsx
+d.A1254 <- data.frame(read_excel("DataAdi.xlsx", sheet = "Aroclor1254",
+                                 col_names = TRUE, col_types = NULL))
+
+# Name parameters
+congener <- d.A1254$congener
+logKa.w <- d.A1254$logKair.water
+dUaw <- d.A1254$dUaw
+logKlip.w <- d.A1254$logKlipid.water
+logKpro.w <- d.A1254$logKprotein.water
+logKalb.w <- d.A1254$logKalbumin.water
+R <- d.A1254$R
+tst <- d.A1254$tst
+texp <- d.A1254$texp
+
+num.congener <- length(congener)
+result <- NULL
+for (i in 1:num.congener) {
+  result <- rbind(result, fraction(logKa.w[i], dUaw[i],
+                                   logKpro.w[i], logKalb.w[i], R[i],
+                                   tst[i], texp[i]))
+}
+
+final.result <- data.frame(congener, result)
+names(final.result) <- c("congener", "frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
+                         "frac.prot.FBS(15%)", "frac.air.FBS(15%)",
+                         "frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
+                         "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)",
+                         "frac.dis.FBS(0%)", "frac.air.FBS(0%)")
+
+# Export results
+write.csv(final.result, file = "A1254NoAdipose.csv")
+
+# Plots without adipose cells ---------------------------------------------
+# Create data.frame with needed fractions
+# final.result needs to be changed, depending on the plot
 # (1) FSB = 15%
 p.FSB.h <- final.result[,!names(final.result) %in% c("frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
                                                      "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)",
@@ -383,73 +451,6 @@ ggplot(p.FSB.0, aes(x = congener, y = fraction, fill = phase)) +
                                    color = "black"),
         axis.title.x = element_text(face = "bold", size = 8))
 
-# Aroclor 1016 (top 12) ---------------------------------------------------
-# Read data.xlsx
-d.A1016 <- data.frame(read_excel("DataAdi.xlsx", sheet = "Aroclor1016",
-                           col_names = TRUE, col_types = NULL))
-
-# Name parameters
-congener <- d.A1016$congener
-logKa.w <- d.A1016$logKair.water
-dUaw <- d.A1016$dUaw
-logKlip.w <- d.A1016$logKlipid.water
-logKpro.w <- d.A1016$logKprotein.water
-logKalb.w <- d.A1016$logKalbumin.water
-R <- d.A1016$R
-tst <- d.A1016$tst
-texp <- d.A1016$texp
-
-num.congener <- length(congener)
-result <- NULL
-for (i in 1:num.congener) {
-  result <- rbind(result, fraction(logKa.w[i], dUaw[i],
-                                   logKpro.w[i], logKalb.w[i], R[i],
-                                   tst[i], texp[i]))
-}
-
-final.result <- data.frame(congener, result)
-names(final.result) <- c("congener", "frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
-                         "frac.prot.FBS(15%)", "frac.air.FBS(15%)",
-                         "frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
-                         "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)",
-                         "frac.dis.FBS(0%)", "frac.air.FBS(0%)")
-
-# Export results
-write.csv(final.result, file = "A1016NoAdipose.csv")
-
-# Aroclor 1254 (top 12) ---------------------------------------------------
-# Read data.xlsx
-d.A1254 <- data.frame(read_excel("DataAdi.xlsx", sheet = "Aroclor1254",
-                                 col_names = TRUE, col_types = NULL))
-
-# Name parameters
-congener <- d.A1254$congener
-logKa.w <- d.A1254$logKair.water
-dUaw <- d.A1254$dUaw
-logKlip.w <- d.A1254$logKlipid.water
-logKpro.w <- d.A1254$logKprotein.water
-logKalb.w <- d.A1254$logKalbumin.water
-R <- d.A1254$R
-tst <- d.A1254$tst
-texp <- d.A1254$texp
-
-num.congener <- length(congener)
-result <- NULL
-for (i in 1:num.congener) {
-  result <- rbind(result, fraction(logKa.w[i], dUaw[i],
-                                   logKpro.w[i], logKalb.w[i], R[i],
-                                   tst[i], texp[i]))
-}
-
-final.result <- data.frame(congener, result)
-names(final.result) <- c("congener", "frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
-                         "frac.prot.FBS(15%)", "frac.air.FBS(15%)",
-                         "frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
-                         "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)",
-                         "frac.dis.FBS(0%)", "frac.air.FBS(0%)")
-
-# Export results
-write.csv(final.result, file = "A1254NoAdipose.csv")
 
 # Aroclor 1016 fraction without adipose cells -----------------------------
 
