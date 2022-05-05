@@ -16,22 +16,6 @@ library(ggplot2)
 # Partitioning from:
 # https://www.ufz.de/index.php?en=31698&contentonly=1&m=0&lserd_data[mvc]=Public/start
 
-# Cabinet mixture ---------------------------------------------------------
-# Read data.xlsx
-d <- data.frame(read_excel("DataAdi.xlsx", sheet = "cabinet",
-                           col_names = TRUE, col_types = NULL))
-
-# Name parameters
-congener <- d$congener
-logKa.w <- d$logKair.water
-dUaw <- d$dUaw
-logKlip.w <- d$logKlipid.water
-logKpro.w <- d$logKprotein.water
-logKalb.w <- d$logKalbumin.water
-R <- d$R
-tst <- d$tst
-texp <- d$texp
-
 #Fixed parameters
 # 24-well plate https://shop.gbo.com/en/usa/products/bioscience/cell-culture-products/cellstar-cell-culture-multiwell-plates/662160.html
 # Multiwell dimensions
@@ -44,7 +28,7 @@ Va <- Vt-Vm # Air volume L
 # Function to calculate fractions
 fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
                     tst, texp) {
-
+  
   # albumin concentration from FBS
   C.alb.h <- 5.145/1000 # kg/L (15%)
   C.alb.l <- 0.25/1000 # kg/L (0.5%)
@@ -89,6 +73,22 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
             f.dis.alb.0, f.air.alb.0)
 }
 
+# Cabinet mixture ---------------------------------------------------------
+# Read data.xlsx
+d <- data.frame(read_excel("DataAdi.xlsx", sheet = "cabinet",
+                           col_names = TRUE, col_types = NULL))
+
+# Name parameters
+congener <- d$congener
+logKa.w <- d$logKair.water
+dUaw <- d$dUaw
+logKlip.w <- d$logKlipid.water
+logKpro.w <- d$logKprotein.water
+logKalb.w <- d$logKalbumin.water
+R <- d$R
+tst <- d$tst
+texp <- d$texp
+
 num.congener <- length(congener)
 result <- NULL
 for (i in 1:num.congener) {
@@ -110,9 +110,9 @@ write.csv(final.result, file = "CabinetNoAdipose.csv")
 # Plots
 # create data.frame with needed fractions
 # (1) FSB = 15%
-p.FSB.h <- final.result[,!names(final.result) %in% c("frac.dis.FSB(0.5%)", "frac.alb.FSB(0.5%)",
-                                                     "frac.prot.FSB(0.5%)", "frac.air.FSB(0.5%)",
-                                                     "frac.dis.FSB(0%)", "frac.air.FSB(0%)")]
+p.FSB.h <- final.result[,!names(final.result) %in% c("frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
+                                                     "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)",
+                                                     "frac.dis.FBS(0%)", "frac.air.FBS(0%)")]
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.h <- melt(p.FSB.h, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
@@ -123,12 +123,12 @@ p.FSB.h$congener <- factor(p.FSB.h$congener,
 
 # Organize fraction to be displayed in plot
 p.FSB.h$phase <- factor(p.FSB.h$phase,
-                        levels = c('frac.air.FSB(15%)', 'frac.alb.FSB(15%)',
-                                   'frac.prot.FSB(15%)', 'frac.dis.FSB(15%)'))
+                        levels = c('frac.air.FBS(15%)', 'frac.alb.FBS(15%)',
+                                   'frac.prot.FBS(15%)', 'frac.dis.FBS(15%)'))
 # Plot
 ggplot(p.FSB.h, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FSB-albumin (15%)", "FSB-protein (15%)",
+  scale_fill_manual(labels = c("air" , "FBS-albumin (15%)", "FBS-protein (15%)",
                                "medium"),
                     values = c("deepskyblue", "lightgrey", "coral4", "red")) +
   theme_classic() +
@@ -139,10 +139,10 @@ ggplot(p.FSB.h, aes(x = congener, y = fraction, fill = phase)) +
                                    color = "black"),
         axis.title.x = element_text(face = "bold", size = 8))
 
-# (2) FSB = 0.5% fix!
-p.FSB.l <- final.result[,!names(final.result) %in% c("frac.dis.alb.h", "frac.alb.alb.h",
-                                                     "frac.prot.alb.h", "frac.air.alb.h",
-                                                     "frac.dis.alb.0", "frac.air.alb.0")]
+# (2) FSB = 0.5%
+p.FSB.l <- final.result[,!names(final.result) %in% c("frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
+                                                     "frac.prot.FBS(15%)", "frac.air.FBS(15%)",
+                                                     "frac.dis.FBS(0%)", "frac.air.FBS(0%)")]
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.l <- melt(p.FSB.l, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
@@ -153,12 +153,12 @@ p.FSB.l$congener <- factor(p.FSB.l$congener,
 
 # Organize fraction to be displayed in plot
 p.FSB.l$phase <- factor(p.FSB.l$phase,
-                        levels = c('frac.air.alb.l', 'frac.alb.alb.l',
-                                   'frac.prot.alb.l', 'frac.dis.alb.l'))
+                        levels = c('frac.air.FBS(0.5%)', 'frac.alb.FBS(0.5%)',
+                                   'frac.prot.FBS(0.5%)', 'frac.dis.FBS(0.5%)'))
 # Plot
 ggplot(p.FSB.l, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FSB-albumin (0.5%)", "FSB-protein (0.5%)",
+  scale_fill_manual(labels = c("air" , "FBS-albumin (0.5%)", "FBS-protein (0.5%)",
                                "medium"),
                     values = c("deepskyblue", "lightgrey", "coral4", "red")) +
   theme_classic() +
@@ -169,11 +169,11 @@ ggplot(p.FSB.l, aes(x = congener, y = fraction, fill = phase)) +
                                    color = "black"),
         axis.title.x = element_text(face = "bold", size = 8))
 
-# (3) FSB = 0.0% fix!
-p.FSB.0 <- final.result[,!names(final.result) %in% c("frac.dis.alb.h", "frac.alb.alb.h",
-                                                     "frac.prot.alb.h", "frac.air.alb.h",
-                                                     "frac.dis.alb.l", "frac.alb.alb.l",
-                                                     "frac.prot.alb.l", "frac.air.alb.l")]
+# (3) FSB = 0.0%
+p.FSB.0 <- final.result[,!names(final.result) %in% c("frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
+                                                     "frac.prot.FBS(15%)", "frac.air.FBS(15%)",
+                                                     "frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
+                                                     "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)")]
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.0 <- melt(p.FSB.0, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
@@ -183,7 +183,7 @@ p.FSB.0$congener <- factor(p.FSB.0$congener,
                                       'PCB68'))
 # Organize fraction to be displayed in plot
 p.FSB.0$phase <- factor(p.FSB.0$phase,
-                        levels = c('frac.air.alb.0', 'frac.dis.alb.0'))
+                        levels = c('frac.air.FBS(0%)', 'frac.dis.FBS(0%)'))
 # Plot
 ggplot(p.FSB.0, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
@@ -216,13 +216,13 @@ fractionAdi = function(logKa.w, dUaw, logKlip.w, logKpro.w, logKalb.w,
   C.water.adi <- C.water.adi/dwater # L/L
   V.water.adi <- C.water.adi*Adi/10^6 # L water inside cell
   # albumin concentration from FSB
-  C.alb.h <- 4.9/1000 # kg/L
+  C.alb.h <- 5.145/1000 # kg/L
   C.alb.l <- 0.25/1000 # kg/L
   dalb <- 1 # kg/L ask!
   C.alb.h <- C.alb.h/dalb # Lalb/Lwater
   C.alb.l <- C.alb.l/dalb # Lalb/Lwater
   # protein concentration from FSB
-  C.prot.med.h <- 4.9/1000 # kg/L
+  C.prot.med.h <- 5.145/1000 # kg/L
   C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
   C.prot.med.l <- 0.25/1000 # kg/L
   C.prot.med.l <- C.prot.med.l/dprot # Lprot/Lwater
