@@ -184,6 +184,7 @@ p.FSB.h <- final.result[,!names(final.result) %in% c("frac.dis.FBS(0.5%)", "frac
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.h <- melt(p.FSB.h, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
+
 # Name the compounds
 p.FSB.h$congener <- factor(p.FSB.h$congener,
                            levels = c('PCB11', 'PCB47', 'PCB51',
@@ -196,8 +197,8 @@ p.FSB.h$phase <- factor(p.FSB.h$phase,
 # Plot
 ggplot(p.FSB.h, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FBS-albumin (15%)", "FBS-protein (15%)",
-                               "medium"),
+  scale_fill_manual(labels = c("Air" , "Albumin-FBS (15%)", "Protein-FBS (15%)",
+                               "Medium"),
                     values = c("deepskyblue", "lightgrey", "coral4", "red")) +
   theme_classic() +
   xlab(expression(bold(""))) +
@@ -214,6 +215,7 @@ p.FSB.l <- final.result[,!names(final.result) %in% c("frac.dis.FBS(15%)", "frac.
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.l <- melt(p.FSB.l, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
+
 # Name the compounds
 p.FSB.l$congener <- factor(p.FSB.l$congener,
                            levels = c('PCB11', 'PCB47', 'PCB51',
@@ -223,11 +225,12 @@ p.FSB.l$congener <- factor(p.FSB.l$congener,
 p.FSB.l$phase <- factor(p.FSB.l$phase,
                         levels = c('frac.air.FBS(0.5%)', 'frac.alb.FBS(0.5%)',
                                    'frac.prot.FBS(0.5%)', 'frac.dis.FBS(0.5%)'))
+
 # Plot
 ggplot(p.FSB.l, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FBS-albumin (0.5%)", "FBS-protein (0.5%)",
-                               "medium"),
+  scale_fill_manual(labels = c("Air" , "Albumin-FBS (0.5%)", "Protein-FBS (0.5%)",
+                               "mMdium"),
                     values = c("deepskyblue", "lightgrey", "coral4", "red")) +
   theme_classic() +
   xlab(expression(bold(""))) +
@@ -242,20 +245,24 @@ p.FSB.0 <- final.result[,!names(final.result) %in% c("frac.dis.FBS(15%)", "frac.
                                                      "frac.prot.FBS(15%)", "frac.air.FBS(15%)",
                                                      "frac.dis.FBS(0.5%)", "frac.alb.FBS(0.5%)",
                                                      "frac.prot.FBS(0.5%)", "frac.air.FBS(0.5%)")]
+
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.0 <- melt(p.FSB.0, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
+
 # Name the compounds
 p.FSB.0$congener <- factor(p.FSB.0$congener,
                            levels = c('PCB11', 'PCB47', 'PCB51',
                                       'PCB68'))
+
 # Organize fraction to be displayed in plot
 p.FSB.0$phase <- factor(p.FSB.0$phase,
                         levels = c('frac.air.FBS(0%)', 'frac.dis.FBS(0%)'))
+
 # Plot
 ggplot(p.FSB.0, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "medium"),
+  scale_fill_manual(labels = c("Air" , "Medium"),
                     values = c("deepskyblue", "red")) +
   theme_classic() +
   xlab(expression(bold(""))) +
@@ -462,23 +469,26 @@ p.FSB.h.adi <- final.resultAdi[,!names(final.resultAdi) %in% c("frac.dis.adi.FBS
                                                                "frac.air.adi.FBS(0.5%)", "frac.dis.adi.FBS(0%)",
                                                                "frac.prot-cell.adi.FBS(0%)", "frac.lip-cell.adi.FBS(0%)",
                                                                "frac.air.adi.FBS(0%)")]
+
 # Transform data.frame p.1 to 3 column data.frame
 p.FSB.h.adi <- melt(p.FSB.h.adi, id.var = c("congener"),
                  variable.name = "phase", value.name = "fraction")
+
 # Name the compounds
 p.FSB.h.adi$congener <- factor(p.FSB.h.adi$congener,
                             levels = c('PCB11', 'PCB47', 'PCB51',
                                        'PCB68'))
+
 # Organize fraction to be displayed in plot
 p.FSB.h.adi$phase <- factor(p.FSB.h.adi$phase,
-                         levels = c('frac.air.alb.h.adi', 'frac.alb.alb.h.adi',
-                                    'frac.prot.alb.h.adi', 'frac.dis.alb.h.adi',
-                                    'frac.lip.adi.alb.h.adi', 'frac.prot.adi.alb.h.adi'))
+                         levels = c('frac.dis.adi.FBS(15%)', 'frac.alb.adi.FBS(15%)', 'frac.prot.adi.FBS(15%)',
+                                    'frac.prot-cell.adi.FBS(15%)', 'frac.lip-cell.adi.FBS(15%)',
+                                    'frac.air.adi.FBS(15%)'))
 # Plot
 ggplot(p.FSB.h.adi, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FSB-albumin (10%)", "FSB-protein (10%)",
-                               "medium", "lip-adipose", "prot-adipose"),
+  scale_fill_manual(labels = c("Air" , "Albumin-FBS (15%)", "Protein-FBS (15%)",
+                               "Medium", "Lipid-cell", "Protein-cell"),
                     values = c("deepskyblue", "lightgrey", "coral4", "red", "blue",
                               "orange")) +
   theme_classic() +
@@ -491,26 +501,35 @@ ggplot(p.FSB.h.adi, aes(x = congener, y = fraction, fill = phase)) +
 
 
 # (2) FSB = 0.5%
-p.FSB.l <- final.result[,!names(final.result) %in% c("frac.dis.alb.h", "frac.alb.alb.h",
-                                                     "frac.prot.alb.h", "frac.air.alb.h",
-                                                     "frac.dis.alb.0", "frac.air.alb.0")]
+p.FSB.l.adi <- final.resultAdi[,!names(final.resultAdi) %in% c("frac.dis.adi.FBS(15%)",
+                                                     "frac.alb.adi.FBS(15%)", "frac.prot.adi.FBS(15%)",
+                                                     "frac.prot-cell.adi.FBS(15%)", "frac.lip-cell.adi.FBS(15%)",
+                                                     "frac.air.adi.FBS(15%)", "frac.dis.adi.FBS(0%)",
+                                                     "frac.prot-cell.adi.FBS(0%)", "frac.lip-cell.adi.FBS(0%)",
+                                                     "frac.air.adi.FBS(0%)")]
+
 # Transform data.frame p.1 to 3 column data.frame
-p.FSB.l <- melt(p.FSB.l, id.var = c("congener"),
+p.FSB.l.adi <- melt(p.FSB.l.adi, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
+
 # Name the compounds
-p.FSB.l$congener <- factor(p.FSB.l$congener,
+p.FSB.l.adi$congener <- factor(p.FSB.l.adi$congener,
                            levels = c('PCB11', 'PCB47', 'PCB51',
                                       'PCB68'))
+
 # Organize fraction to be displayed in plot
-p.FSB.l$phase <- factor(p.FSB.l$phase,
-                        levels = c('frac.air.alb.l', 'frac.alb.alb.l',
-                                   'frac.prot.alb.l', 'frac.dis.alb.l'))
+p.FSB.l.adi$phase <- factor(p.FSB.l.adi$phase,
+                        levels = c('frac.dis.adi.FBS(0.5%)', 'frac.alb.adi.FBS(0.5%)', 'frac.prot.adi.FBS(0.5%)',
+                                   'frac.prot-cell.adi.FBS(0.5%)', 'frac.lip-cell.adi.FBS(0.5%)',
+                                   'frac.air.adi.FBS(0.5%)'))
+
 # Plot
-ggplot(p.FSB.l, aes(x = congener, y = fraction, fill = phase)) + 
+ggplot(p.FSB.l.adi, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "FSB-albumin (0.5%)", "FSB-protein (0.5%)",
-                               "medium"),
-                    values = c("deepskyblue", "lightgrey", "coral4", "red")) +
+  scale_fill_manual(labels = c("Air" , "Albumin-FBS (0.5%)", "Protein-FBS (0.5%)",
+                               "Medium", "Lipid-cell", "Protein-cell"),
+                    values = c("deepskyblue", "lightgrey", "coral4", "red", "blue",
+                               "orange")) +
   theme_classic() +
   xlab(expression(bold(""))) +
   ylab(expression("Fraction in well")) +
@@ -520,25 +539,33 @@ ggplot(p.FSB.l, aes(x = congener, y = fraction, fill = phase)) +
         axis.title.x = element_text(face = "bold", size = 8))
 
 # (3) FSB = 0.0%
-p.FSB.0 <- final.result[,!names(final.result) %in% c("frac.dis.alb.h", "frac.alb.alb.h",
-                                                     "frac.prot.alb.h", "frac.air.alb.h",
-                                                     "frac.dis.alb.l", "frac.alb.alb.l",
-                                                     "frac.prot.alb.l", "frac.air.alb.l")]
+p.FSB.0.adi <- final.resultAdi[,!names(final.resultAdi) %in% c("frac.dis.adi.FBS(15%)", "frac.alb.adi.FBS(15%)",
+                                                               "frac.prot.adi.FBS(15%)", "frac.prot-cell.adi.FBS(15%)", "frac.lip-cell.adi.FBS(15%)",
+                                                     "frac.air.adi.FBS(15%)", "frac.dis.adi.FBS(0.5%)",
+                                                     "frac.alb.adi.FBS(0.5%)", "frac.prot.adi.FBS(0.5%)",
+                                                     "frac.prot-cell.adi.FBS(0.5%)", "frac.lip-cell.adi.FBS(0.5%)",
+                                                     "frac.air.adi.FBS(0.5%)")]
+
 # Transform data.frame p.1 to 3 column data.frame
-p.FSB.0 <- melt(p.FSB.0, id.var = c("congener"),
+p.FSB.0.adi <- melt(p.FSB.0.adi, id.var = c("congener"),
                 variable.name = "phase", value.name = "fraction")
+
 # Name the compounds
-p.FSB.0$congener <- factor(p.FSB.0$congener,
+p.FSB.0.adi$congener <- factor(p.FSB.0.adi$congener,
                            levels = c('PCB11', 'PCB47', 'PCB51',
                                       'PCB68'))
-# Organize fraction to be displayed in plot
-p.FSB.0$phase <- factor(p.FSB.0$phase,
-                        levels = c('frac.air.alb.0', 'frac.dis.alb.0'))
 
-ggplot(p.FSB.0, aes(x = congener, y = fraction, fill = phase)) + 
+# Organize fraction to be displayed in plot
+p.FSB.0.adi$phase <- factor(p.FSB.0.adi$phase,
+                        levels = c('frac.air.adi.FBS(0%)', 'frac.dis.adi.FBS(0%)',
+                                   'frac.lip-cell.adi.FBS(0%)',
+                                   'frac.prot-cell.adi.FBS(0%)'))
+
+ggplot(p.FSB.0.adi, aes(x = congener, y = fraction, fill = phase)) + 
   geom_bar(stat = "identity", col = "white") +
-  scale_fill_manual(labels = c("air" , "medium"),
-                    values = c("deepskyblue", "red")) +
+  scale_fill_manual(labels = c("air", "medium", "Lipid-cell", "Protein-cell"),
+                    values = c("deepskyblue", "red", "blue",
+                               "orange")) +
   theme_classic() +
   xlab(expression(bold(""))) +
   ylab(expression("Fraction in well")) +
@@ -546,5 +573,4 @@ ggplot(p.FSB.0, aes(x = congener, y = fraction, fill = phase)) +
                                    angle = 60, hjust = 1,
                                    color = "black"),
         axis.title.x = element_text(face = "bold", size = 8))
-
 
