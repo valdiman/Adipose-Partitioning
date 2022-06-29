@@ -428,7 +428,7 @@ names(final.resultAdi) <- c("congener", "frac.dis.adi.FBS(15%)",
                             "frac.air.adi.FBS(0%)")
 
 # Export results
-write.csv(final.resultAdi, file = "CabinetAdipose.csv")
+write.csv(final.resultAdi, file = "CabinetAdiposeV2.csv")
 # To make plots, jump to section "Plots with adipose cells"
 
 # Aroclor 1016 (top 12) with adipose cells --------------------------------
@@ -467,7 +467,7 @@ names(final.resultAdi) <- c("congener", "frac.dis.adi.FBS(15%)",
                             "frac.air.adi.FBS(0%)")
 
 # Export results
-write.csv(final.resultAdi, file = "A1016Adipose.csv")
+write.csv(final.resultAdi, file = "A1016AdiposeV2.csv")
 # To make plots, jump to section "Plots with adipose cells"
 
 # Aroclor 1254 (top 12) with adipose cells --------------------------------
@@ -506,7 +506,7 @@ names(final.resultAdi) <- c("congener", "frac.dis.adi.FBS(15%)",
                             "frac.air.adi.FBS(0%)")
 
 # Export results
-write.csv(final.resultAdi, file = "A1254Adipose.csv")
+write.csv(final.resultAdi, file = "A1254AdiposeV2.csv")
 # To make plots, jump to section "Plots with adipose cells"
 
 # Plots with adipose cells ------------------------------------------------
