@@ -3,6 +3,10 @@
 # 3 main caculations: (1) Cabinet mixture, (2) Aroclor 1016 (top 12)
 # and (3) Aroclor 1254 (top 12)
 
+
+# 3.5 mL (media) will contain 0.0175 mL FBS
+# 0.525 mL FBS (in 15% FBS)
+
 # Install packages
 install.packages("readxl")
 install.packages("reshape2")
@@ -29,16 +33,21 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
                     tst, texp) {
   
   # albumin concentration from FBS
-  C.alb.h <- 5.145/1000 # kg/L (15%)
-  C.alb.l <- 0.25/1000 # kg/L (0.5%)
+  # Concentration of albumin in FBS
+  V.FBS.h <- 0.15 # mL 15%
+  V.FBS.l <- 0.05 # mL 0.5%
+  C.alb.initial <- 23 # mg/mL
+  C.prot.initial <- (38 - C.alb.initial) # mg/mL
+  C.alb.h <- C.alb.initial*V.FBS.h/Vm/1000/1000 # kg/L (15%)
+  C.alb.l <- C.alb.initial*V.FBS.l/Vm/1000/1000 # kg/L (0.5%)
   dalb <- 1 # kg/L ask!
   C.alb.h <- C.alb.h/dalb # Lalb/Lwater
   C.alb.l <- C.alb.l/dalb # Lalb/Lwater
   # protein concentration from FBS
-  C.prot.med.h <- 5.145/1000 # kg/L
+  C.prot.med.h <- C.prot.initial*V.FBS.h/Vm/1000/1000 # kg/L
   dprot <- 1.43 # kg/L ask! ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
   C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
-  C.prot.med.l <- 0.25/1000 # kg/L
+  C.prot.med.l <- C.prot.initial*V.FBS.l/Vm/1000/1000 # kg/L
   C.prot.med.l <- C.prot.med.l/dprot # Lprot/Lwater
   
   # Temperature correction for Kaw
@@ -139,7 +148,7 @@ names(final.result) <- c("congener", "frac.dis.FBS(15%)", "frac.alb.FBS(15%)",
                          "frac.dis.FBS(0%)", "frac.air.FBS(0%)")
 
 # Export results
-write.csv(final.result, file = "A1016NoAdipose.csv")
+write.csv(final.result, file = "A1016NoAdiposeV3.csv")
 # To make plots, jump to section "Plots without adipose cells"
 
 # Aroclor 1254 (top 12) without adipose cells -----------------------------
