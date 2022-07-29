@@ -28,7 +28,7 @@ Va <- Vt-Vm # Air volume L
 fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
                     tst, texp) {
   
-  # albumin concentration from FBS
+  # Albumin concentration from FBS
   # Concentration of albumin in FBS
   V.FBS.h <- 0.15 # mL 15%
   V.FBS.l <- 0.05 # mL 0.5%
@@ -36,14 +36,14 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
   C.prot.initial <- (38 - C.alb.initial) # mg/mL
   C.alb.h <- C.alb.initial*V.FBS.h/Vm/1000/1000 # kg/L (15%)
   C.alb.l <- C.alb.initial*V.FBS.l/Vm/1000/1000 # kg/L (0.5%)
-  dalb <- 1 # kg/L ask!
+  dalb <- 1 # kg/L albumin density
   C.alb.h <- C.alb.h/dalb # Lalb/Lwater
   C.alb.l <- C.alb.l/dalb # Lalb/Lwater
-  # protein concentration from FBS
+  # Protein concentration from FBS
   C.prot.med.h <- C.prot.initial*V.FBS.h/Vm/1000/1000 # kg/L
-  dprot <- 1.43 # kg/L ask! ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
-  C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
   C.prot.med.l <- C.prot.initial*V.FBS.l/Vm/1000/1000 # kg/L
+  dprot <- 1.43 # kg/L protein density. ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
+  C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
   C.prot.med.l <- C.prot.med.l/dprot # Lprot/Lwater
   
   # Temperature correction for Kaw
@@ -333,27 +333,33 @@ fractionAdi = function(logKa.w, dUaw, logKlip.w, logKpro.w, logKalb.w,
   Adi <- 10^-7 # kg/well
   C.adi <- Adi/Vm # Concentration of cell per well #kg/L
   C.lip.adi <- C.adi*0.6 # lipid content 60% kg/L
-  dlip <- 0.905 # kg/L ask! ref: https://pubmed.ncbi.nlm.nih.gov/8148928/
+  dlip <- 0.905 # kg/L lipid density. ref: https://pubmed.ncbi.nlm.nih.gov/8148928/
   C.lip.adi <- C.lip.adi/dlip # L/L
   C.prot.adi <- C.adi*0.004 # protein content 0.4% kg/L
-  dprot <- 1.43 # kg/L ask! ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
+  dprot <- 1.43 # kg/L protein density. ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
   C.prot.adi <- C.prot.adi/dprot # L/L
   C.water.adi <- C.adi*0.4 # water content 40% kg/L
-  dwater <- 0.99127 # kg/L at 37 C
+  dwater <- 0.99127 # kg/L water density at 37 C
   C.water.adi <- C.water.adi/dwater # L/L
   V.water.adi <- C.water.adi*Adi/10^6 # L water inside cell
-  # Albumin concentration from FBS
-  C.alb.h <- 5.145/1000 # kg/L
-  C.alb.l <- 0.25/1000 # kg/L
-  dalb <- 1 # kg/L ask!
+  
+  # Concentration of albumin in FBS
+  V.FBS.h <- 0.15 # mL 15%
+  V.FBS.l <- 0.05 # mL 0.5%
+  C.alb.initial <- 23 # mg/mL
+  C.prot.initial <- (38 - C.alb.initial) # mg/mL
+  C.alb.h <- C.alb.initial*V.FBS.h/Vm/1000/1000 # kg/L (15%)
+  C.alb.l <- C.alb.initial*V.FBS.l/Vm/1000/1000 # kg/L (0.5%)
+  dalb <- 1 # kg/L albumin density
   C.alb.h <- C.alb.h/dalb # Lalb/Lwater
   C.alb.l <- C.alb.l/dalb # Lalb/Lwater
   # Protein concentration from FBS
-  C.prot.med.h <- 5.145/1000 # kg/L
+  C.prot.med.h <- C.prot.initial*V.FBS.h/Vm/1000/1000 # kg/L
+  C.prot.med.l <- C.prot.initial*V.FBS.l/Vm/1000/1000 # kg/L
+  dprot <- 1.43 # kg/L protein density. ref: https://pubmed.ncbi.nlm.nih.gov/10930825/
   C.prot.med.h <- C.prot.med.h/dprot # Lprot/Lwater
-  C.prot.med.l <- 0.25/1000 # kg/L
   C.prot.med.l <- C.prot.med.l/dprot # Lprot/Lwater
-  
+
   # Temperature correction for Kaw
   Ka.w.t <- 10^(logKa.w)*exp(-dUaw/R*(1/texp-1/tst)) # Ka.w corrected by water and air temps
   logKa.w.t <- log10(Ka.w.t)
