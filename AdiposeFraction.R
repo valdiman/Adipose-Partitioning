@@ -31,7 +31,7 @@ fraction = function(logKa.w, dUaw, logKpro.w, logKalb.w, R,
   # Albumin concentration from FBS
   # Concentration of albumin in FBS
   V.FBS.h <- 0.15 # mL 15%
-  V.FBS.l <- 0.05 # mL 0.5%
+  V.FBS.l <- 0.005 # mL 0.5%
   C.alb.initial <- 23 # mg/mL
   C.prot.initial <- (38 - C.alb.initial) # mg/mL
   C.alb.h <- C.alb.initial*V.FBS.h/Vm/1000/1000 # kg/L (15%)
@@ -345,7 +345,7 @@ fractionAdi = function(logKa.w, dUaw, logKlip.w, logKpro.w, logKalb.w,
   
   # Concentration of albumin in FBS
   V.FBS.h <- 0.15 # mL 15%
-  V.FBS.l <- 0.05 # mL 0.5%
+  V.FBS.l <- 0.005 # mL 0.5%
   C.alb.initial <- 23 # mg/mL
   C.prot.initial <- (38 - C.alb.initial) # mg/mL
   C.alb.h <- C.alb.initial*V.FBS.h/Vm/1000/1000 # kg/L (15%)
