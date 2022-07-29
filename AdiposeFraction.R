@@ -3,10 +3,6 @@
 # 3 main caculations: (1) Cabinet mixture, (2) Aroclor 1016 (top 12)
 # and (3) Aroclor 1254 (top 12)
 
-
-# 3.5 mL (media) will contain 0.0175 mL FBS
-# 0.525 mL FBS (in 15% FBS)
-
 # Install packages
 install.packages("readxl")
 install.packages("reshape2")
